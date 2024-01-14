@@ -108,6 +108,7 @@ export {
   TypographyInlineCode,
   TypographyLead,
   TypographyLarge,
+  TypographyMedium,
   TypographySmall,
   TypographyMuted
 };
