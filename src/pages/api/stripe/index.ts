@@ -4,7 +4,7 @@ import { NextApiRequestWithUser, firebaseAuth } from "@/middlewares/auth";
 import type { NextApiResponse } from "next";
 import { stripe } from "@/lib/stripe";
 import { UserData } from "@/hooks/use-user";
-import { formatDateJson } from "@/lib/utils";
+import { formatDateJsonToObject } from "@/lib/utils";
 
 async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
   const billingUrl = `${process.env.NEXT_PUBLIC_ORIGIN_URL}/dashboard/billing`;
@@ -24,9 +24,7 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
       userData &&
         userData?.stripePriceId &&
         userData?.stripeCurrentPeriodEnd &&
-        formatDateJson(userData?.stripeCurrentPeriodEnd)?.getTime() +
-          86_400_000 >
-          Date.now()
+        formatDateJsonToObject(userData?.stripeCurrentPeriodEnd)?.getTime() + 86_400_000 > Date.now()
     );
 
     // The user is on the pro plan.
@@ -34,14 +32,14 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
     if (isPro && userData?.stripeCustomerId) {
       const stripeSession = await stripe.billingPortal.sessions.create({
         customer: userData?.stripeCustomerId,
-        return_url: billingUrl,
+        return_url: billingUrl
       });
 
       return res.status(200).json({
         message: "Success",
         data: {
-          url: stripeSession.url,
-        },
+          url: stripeSession.url
+        }
       });
     }
 
@@ -57,12 +55,12 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
       line_items: [
         {
           price: proPlan.stripePriceId,
-          quantity: 1,
-        },
+          quantity: 1
+        }
       ],
       metadata: {
-        userId,
-      },
+        userId
+      }
     });
     res.status(200).json({ message: "Success", data: stripeSession });
   } catch (error) {
