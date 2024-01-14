@@ -2,7 +2,7 @@ import axios from "@/lib/axios";
 import admin from "./firebase-admin";
 
 const storage = admin.storage();
-const bucket = storage.bucket("aicreatorhub-io.appspot.com");
+const bucket = storage.bucket(process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET);
 const bucketUrlPath = `https://storage.googleapis.com/${bucket.name}`;
 
 export async function uploadBase64(image: string, path: string) {
