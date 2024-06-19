@@ -1,9 +1,9 @@
 import axios from "@/lib/axios";
 import admin from "./firebase-admin";
 
-const storage = admin.storage();
-const bucket = storage.bucket(process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET);
-const bucketUrlPath = `https://storage.googleapis.com/${bucket.name}`;
+const storage = admin?.storage();
+const bucket = storage?.bucket("aicreatorhub-io.appspot.com");
+const bucketUrlPath = `https://storage.googleapis.com/${bucket?.name}`;
 
 export async function uploadBase64(image: string, path: string) {
   let buffer: Buffer;
@@ -17,8 +17,8 @@ export async function uploadBase64(image: string, path: string) {
   } else {
     buffer = Buffer.from(image, "base64");
   }
-  const blob = bucket.file(path);
-  await blob.save(buffer, {
+  const blob = bucket?.file(path);
+  await blob?.save(buffer, {
     metadata: {
       contentType: "image/jpeg",
     },
